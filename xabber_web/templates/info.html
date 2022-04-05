@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}XabberWeb Settings{% endblock %}
+{% block main_content %}
+   <div class="container">
+        <div class="row no-gutters">
+            <div class="col breadcrumbs">
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item"><h1>Xabber Web settings</h1></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row no-gutters">
+            <div class="col tabs">
+                {% if warning %}
+                <div class="alert alert-warning" role="alert">
+                    {{ warning }}
+                </div>
+                {% else %}
+                <div class="alert alert-success" role="alert">
+                    Everything is fine. Go to <a href="/">Xabber fo Web</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
