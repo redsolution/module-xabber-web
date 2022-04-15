@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 from server.models import RootPageSettings
-from xmppserverui.mixins import AuthMixin
+from xmppserverui.mixins import PageContextMixin
 from django.conf import settings
 from .apps import ModuleConfig
 
@@ -9,7 +9,7 @@ class RootView(TemplateView):
     template_name = 'index.html'
 
 
-class XabberWebInfoView(AuthMixin, TemplateView):
+class XabberWebInfoView(PageContextMixin, TemplateView):
     template_name = 'info.html'
 
     def get(self, request, *args, **kwargs):
