@@ -190,15 +190,7 @@
 </div>
 <script>
     require(['xabber'], function (xabber) {
-        xabber.configure({
-            CONNECTION_URL: (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.hostname  + (window.location.protocol === 'https:' ? ':5443/wss' : ':5280/ws'),
-            DISABLE_LOOKUP_WS: true,
-            LOG_LEVEL: 'INFO',
-            DEBUG: true,
-            REGISTER_XMPP_ACCOUNT: false,
-            USE_SOCIAL_AUTH: false,
-            CHECK_VERSION: false,
-        });
+        xabber.configure({{ config|safe }});
     xabber.start();
     });
 </script>
