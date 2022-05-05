@@ -3,19 +3,42 @@ from registration.models import RegistrationSettings
 from virtualhost.models import VirtualHost
 
 
+DOMAIN_LISTS = ['LOGIN_DOMAINS', 'REGISTRATION_DOMAINS', 'TRUSTED_DOMAINS']
+
+
+def domains_to_list(config_dict, is_form=False):
+    for key in DOMAIN_LISTS:
+        value = config_dict.get(key, False)
+        if value and isinstance(value, str):
+            if is_form:
+                config_dict[key] = sorted([_str.strip() for _str in value.splitlines()])
+            else:
+                config_dict[key] = sorted(value.split(','))
+    return config_dict
+
+
+def domains_to_string(config_dict):
+    for key in DOMAIN_LISTS:
+        value = config_dict.get(key, False)
+        if value:
+            config_dict[key] = '\n'.join(value)
+    return config_dict
+
+
 def get_config():
     """
     debug, trusted_domains, check_version - immutable
     """
+    vhosts = list(VirtualHost.objects.order_by('name').values_list('name', flat=True))
+    reg_vhosts = list(RegistrationSettings.objects.order_by('vhost__name').values_list('vhost__name', flat=True))
     template_config = {
-        "CONNECTION_URL": "(window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.hostname  + (window.location.protocol === 'https:' ? ':5443/wss' : ':5280/ws')",
+        "CONNECTION_URL": None,
         "DISABLE_LOOKUP_WS": "true",
         "LOG_LEVEL": "ERROR",
         "MAIN_COLOR": "red",
-        "DEBUG": "true",
-        "LOGIN_DOMAINS": ','.join([obj.name for obj in VirtualHost.objects.all()]),
-        "REGISTRATION_DOMAINS": ','.join(sorted([obj.vhost.name for obj in RegistrationSettings.objects.all()])),
-        "TRUSTED_DOMAINS": None,
+        "LOGIN_DOMAINS": vhosts,
+        "REGISTRATION_DOMAINS": reg_vhosts,
+        "TRUSTED_DOMAINS": vhosts,
         "RECOMMENDED_DOMAIN": None,
         "TURN_SERVERS_LIST": None,
         "CHECK_VERSION": "false",
@@ -26,20 +49,21 @@ def get_config():
     if xabberweb_settings:
         for obj in xabberweb_settings.values():
             template_config[obj.get('key')] = obj.get('value')
-    return template_config
+    return domains_to_list(template_config)
 
 
 def update_config(form):
     current_config = get_config()
-    form['LOGIN_DOMAINS'] = ','.join(form['LOGIN_DOMAINS'].splitlines())
-    form['REGISTRATION_DOMAINS'] = ','.join(form['REGISTRATION_DOMAINS'].splitlines())
-
     for key, value in form.items():
-        if key in current_config and set(str(form[key])) != set(str(current_config[key])):
+        if key in current_config and form[key] != current_config[key]:
+
             try:
-                config_key = XabberWebSettings.objects.get(key=key)
-                config_key.value = value
-                config_key.save()
+                if value is None:
+                    XabberWebSettings.objects.get(key=key).delete()
+                else:
+                    config_key = XabberWebSettings.objects.get(key=key)
+                    config_key.value = value
+                    config_key.save()
             except XabberWebSettings.DoesNotExist:
                 XabberWebSettings.objects.create(key=key, value=value)
 

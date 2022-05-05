@@ -1,4 +1,5 @@
 from django import forms
+from .utils import domains_to_list
 
 
 class XabberWebConfigForm(forms.Form):
@@ -7,6 +8,11 @@ class XabberWebConfigForm(forms.Form):
         ('true', 'true'),
         ('false', 'false')
     )
+    COLORS = [('red', 'red'), ('pink', 'pink'), ('purple', 'purple'), ('deep-purple', 'deep-purple'),
+              ('indigo', 'indigo'), ('blue', 'blue'), ('light-blue', 'light-blue'), ('cyan', 'cyan'),
+              ('teal', 'teal'), ('green', 'green'), ('light-green', 'light-green'), ('lime', 'lime'),
+              ('amber', 'amber'), ('orange', 'orange'), ('deep-orange', 'deep-orange'),
+              ('brown', 'brown'), ('blue-grey', 'blue-grey')]
 
     LOG_LEVEL_CHOICE = (
         ('NONE', 'NONE'),
@@ -19,6 +25,7 @@ class XabberWebConfigForm(forms.Form):
     CONNECTION_URL = forms.CharField(
         max_length=200,
         required=False,
+        empty_value=None,
         label='Connection url',
         widget=forms.TextInput(attrs={
             'size': 40,
@@ -46,6 +53,7 @@ class XabberWebConfigForm(forms.Form):
 
     LOGIN_DOMAINS = forms.CharField(
         required=False,
+        empty_value=None,
         label='Login domains',
         widget=forms.Textarea(attrs={
             'rows': 3,
@@ -55,6 +63,7 @@ class XabberWebConfigForm(forms.Form):
 
     REGISTRATION_DOMAINS = forms.CharField(
         required=False,
+        empty_value=None,
         label='Registration domains',
         widget=forms.Textarea(attrs={
             'rows': 3,
@@ -64,6 +73,7 @@ class XabberWebConfigForm(forms.Form):
 
     RECOMMENDED_DOMAIN = forms.CharField(
         required=False,
+        empty_value=None,
         label='Recommended domain',
         widget=forms.TextInput(attrs={
             'size': 40,
@@ -75,6 +85,7 @@ class XabberWebConfigForm(forms.Form):
     TURN_SERVERS_LIST = forms.CharField(
         max_length=100,
         required=False,
+        empty_value=None,
         label='Turn servers list',
         widget=forms.Textarea(attrs={
             'rows': 3,
@@ -100,10 +111,11 @@ class XabberWebConfigForm(forms.Form):
         })
     )
 
-    MAIN_COLOR = forms.CharField(
+    MAIN_COLOR = forms.ChoiceField(
         required=False,
         label='Main color',
-        widget=forms.TextInput(attrs={
+        choices=COLORS,
+        widget=forms.Select(attrs={
             'hint': "Main client color for elements"
         })
     )
@@ -115,6 +127,6 @@ class XabberWebConfigForm(forms.Form):
     )
 
     def clean(self, *args, **kwargs):
-        cleaned_data = super().clean()
+        cleaned_data = domains_to_list(self.cleaned_data, is_form=True)
         del cleaned_data['is_enabled']
-
+        return cleaned_data
