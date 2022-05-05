@@ -56,7 +56,7 @@ def update_config(form):
     current_config = get_config()
     for key, value in form.items():
         if key in current_config and form[key] != current_config[key]:
-
+            value = ','.join(value) if isinstance(value, list) else value
             try:
                 if value is None:
                     XabberWebSettings.objects.get(key=key).delete()
