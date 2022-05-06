@@ -11,9 +11,9 @@ def domains_to_list(config_dict, is_form=False):
         value = config_dict.get(key, False)
         if value and isinstance(value, str):
             if is_form:
-                config_dict[key] = sorted([_str.strip() for _str in value.splitlines()])
+                config_dict[key] = [_str.strip() for _str in value.splitlines()]
             else:
-                config_dict[key] = sorted(value.split(','))
+                config_dict[key] = value.split(',')
     return config_dict
 
 
