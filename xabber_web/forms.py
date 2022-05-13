@@ -1,5 +1,5 @@
 from django import forms
-from .utils import domains_to_list
+from .config import domains_to_list
 
 
 class XabberWebConfigForm(forms.Form):
@@ -53,7 +53,6 @@ class XabberWebConfigForm(forms.Form):
 
     LOGIN_DOMAINS = forms.CharField(
         required=False,
-        empty_value=None,
         label='Login domains',
         widget=forms.Textarea(attrs={
             'rows': 3,
@@ -63,7 +62,6 @@ class XabberWebConfigForm(forms.Form):
 
     REGISTRATION_DOMAINS = forms.CharField(
         required=False,
-        empty_value=None,
         label='Registration domains',
         widget=forms.Textarea(attrs={
             'rows': 3,
@@ -99,6 +97,15 @@ class XabberWebConfigForm(forms.Form):
         choices=BOOL_CHOICE,
         widget=forms.Select(attrs={
             'hint': "Decides whether registration on domains not listed in REGISTRATION_DOMAINS is possible"
+        })
+    )
+
+    REGISTRATION_BUTTON = forms.ChoiceField(
+        required=False,
+        label='Show registration button',
+        choices=BOOL_CHOICE,
+        widget=forms.Select(attrs={
+            'hint': "Show/Hide registration button"
         })
     )
 

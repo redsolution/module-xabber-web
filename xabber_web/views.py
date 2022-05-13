@@ -7,14 +7,14 @@ from django.conf import settings
 from .config import WHITENOISE_ROOT
 from .forms import XabberWebConfigForm
 from .models import XabberWebSettings
-from .utils import domains_to_string, get_config, update_config
+from .config import domains_to_string, get_xabber_config, update_config
 
 
 class RootView(ServerInstalledMixin, TemplateView):
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
-        xabber_web_config = get_config()
+        xabber_web_config = get_xabber_config()
         for key, value in xabber_web_config.items():
             if isinstance(value, str) and value not in ['true', 'false']:
                 xabber_web_config[key] = "'{}'".format(value)
@@ -36,7 +36,7 @@ class XabberWebInfoView(PageContextMixin, TemplateView):
                     warning = 'The server restart is required'
             except Exception:
                 warning = 'Server restart required'
-        current_config = domains_to_string(get_config())
+        current_config = domains_to_string(get_xabber_config())
         form = XabberWebConfigForm(initial=current_config)
         return self.render_to_response(context={'warning': warning, "form": form})
 

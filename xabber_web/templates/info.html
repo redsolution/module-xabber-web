@@ -28,6 +28,9 @@
                 {% with form.REGISTRATION_DOMAINS as field %}
                     {% include 'include/input_field_with_popover.html' %}
                 {% endwith %}
+                {% with form.REGISTRATION_BUTTON as field %}
+                    {% include 'include/input_field_with_popover.html' %}
+                {% endwith %}
                 <hr>
                 {% with form.is_enabled as field %}
                         {% include 'include/input_field.html' %}
