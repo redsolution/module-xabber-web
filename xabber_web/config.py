@@ -72,3 +72,7 @@ def update_config(form):
                     config_key.save()
                 except XabberWebSettings.DoesNotExist:
                     XabberWebSettings.objects.create(key=key, value=value)
+
+
+# automatically overwritten when making a build
+XABBER_WEB_VER = None

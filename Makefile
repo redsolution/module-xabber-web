@@ -40,6 +40,8 @@ static:
 	@cp -r $(BUILD_DIR)/xabber_web/firebase-messaging-sw.js  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
 	@cp -r $(BUILD_DIR)/xabber_web/background-images.xml  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
 	@cp -r $(BUILD_DIR)/xabber_web/background-patterns.xml  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
+	@WEB_VER=$$(grep \"version_number\" $(BUILD_DIR)/xabber_web/version.js | sed -n "s/.*\"version_number\":\(\S*\),.*$$/\1/p");\
+	sed -r "s/^(XABBER_WEB_VER =).*/\1 $$WEB_VER/" xabber_web/config.py > $(PANEL)/xabber_web/config.py
 	@echo ". done."
 
 

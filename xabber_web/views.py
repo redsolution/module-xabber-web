@@ -7,7 +7,7 @@ from django.conf import settings
 from .config import WHITENOISE_ROOT
 from .forms import XabberWebConfigForm
 from .models import XabberWebSettings
-from .config import domains_to_string, get_xabber_config, update_config
+from .config import domains_to_string, get_xabber_config, update_config, XABBER_WEB_VER
 
 
 class RootView(ServerInstalledMixin, TemplateView):
@@ -18,7 +18,11 @@ class RootView(ServerInstalledMixin, TemplateView):
         for key, value in xabber_web_config.items():
             if isinstance(value, str) and value not in ['true', 'false']:
                 xabber_web_config[key] = "'{}'".format(value)
-        return self.render_to_response(context={'config': xabber_web_config})
+
+        context = {'config': xabber_web_config}
+        if XABBER_WEB_VER:
+            context['xabber_web_ver'] = XABBER_WEB_VER
+        return self.render_to_response(context=context)
 
 
 class XabberWebInfoView(PageContextMixin, TemplateView):
