@@ -39,7 +39,7 @@ def get_xabber_config():
         "LOG_LEVEL": "ERROR",
         "MAIN_COLOR": "red",
         "LOGIN_DOMAINS": vhosts,
-        "REGISTRATION_DOMAINS": reg_vhosts,
+        "REGISTRATION_DOMAINS": reg_vhosts if reg_vhosts else None,
         "TRUSTED_DOMAINS": vhosts,
         "RECOMMENDED_DOMAIN": None,
         "TURN_SERVERS_LIST": None,
