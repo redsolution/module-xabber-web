@@ -8,11 +8,11 @@ class XabberWebConfigForm(forms.Form):
         ('true', 'true'),
         ('false', 'false')
     )
-    COLORS = [('red', 'red'), ('pink', 'pink'), ('purple', 'purple'), ('deep-purple', 'deep-purple'),
+    COLORS = (('red', 'red'), ('pink', 'pink'), ('purple', 'purple'), ('deep-purple', 'deep-purple'),
               ('indigo', 'indigo'), ('blue', 'blue'), ('light-blue', 'light-blue'), ('cyan', 'cyan'),
               ('teal', 'teal'), ('green', 'green'), ('light-green', 'light-green'), ('lime', 'lime'),
               ('amber', 'amber'), ('orange', 'orange'), ('deep-orange', 'deep-orange'),
-              ('brown', 'brown'), ('blue-grey', 'blue-grey')]
+              ('brown', 'brown'), ('blue-grey', 'blue-grey'))
 
     LOG_LEVEL_CHOICE = (
         ('NONE', 'NONE'),
@@ -29,7 +29,7 @@ class XabberWebConfigForm(forms.Form):
         label='Connection url',
         widget=forms.TextInput(attrs={
             'size': 40,
-            'hint': "WebSocket URL used for creating connections"
+            'hint': 'WebSocket URL used for creating connections'
         })
     )
     DISABLE_LOOKUP_WS = forms.ChoiceField(
@@ -38,7 +38,7 @@ class XabberWebConfigForm(forms.Form):
         initial='true',
         choices=BOOL_CHOICE,
         widget=forms.Select(attrs={
-            'hint': "Disable lookup for domain using websocket known hosts"
+            'hint': 'Disable lookup for domain using websocket known hosts'
         })
     )
 
@@ -47,7 +47,7 @@ class XabberWebConfigForm(forms.Form):
         label='Log level',
         choices=LOG_LEVEL_CHOICE,
         widget=forms.Select(attrs={
-            'hint': "Strophe console log level"
+            'hint': 'Strophe console log level'
         })
     )
 
@@ -75,8 +75,8 @@ class XabberWebConfigForm(forms.Form):
         label='Recommended domain',
         widget=forms.TextInput(attrs={
             'size': 40,
-            'hint': "Domain recommended for account registration when authentication occurs on a server where not all "
-                    "client functions are supported. "
+            'hint': 'Domain recommended for account registration when authentication occurs on a server where not all '
+                    'client functions are supported. '
         })
     )
 
@@ -87,7 +87,7 @@ class XabberWebConfigForm(forms.Form):
         label='Turn servers list',
         widget=forms.Textarea(attrs={
             'rows': 3,
-            'hint': "Servers for Jingle Message connection"
+            'hint': 'Servers for Jingle Message connection'
         })
     )
 
@@ -96,7 +96,7 @@ class XabberWebConfigForm(forms.Form):
         label='Registration on custom domain',
         choices=BOOL_CHOICE,
         widget=forms.Select(attrs={
-            'hint': "Decides whether registration on domains not listed in REGISTRATION_DOMAINS is possible"
+            'hint': 'Decides whether registration on domains not listed in REGISTRATION_DOMAINS is possible'
         })
     )
 
@@ -105,7 +105,7 @@ class XabberWebConfigForm(forms.Form):
         label='Show registration button',
         choices=BOOL_CHOICE,
         widget=forms.Select(attrs={
-            'hint': "Show/Hide registration button"
+            'hint': 'Show/Hide registration button'
         })
     )
 
@@ -114,7 +114,7 @@ class XabberWebConfigForm(forms.Form):
         label='Login to custom domains',
         choices=BOOL_CHOICE,
         widget=forms.Select(attrs={
-            'hint': "Decides whether authentication on domains not listed in LOGIN_DOMAINS is possible"
+            'hint': 'Decides whether authentication on domains not listed in LOGIN_DOMAINS is possible'
         })
     )
 
@@ -123,7 +123,7 @@ class XabberWebConfigForm(forms.Form):
         label='Main color',
         choices=COLORS,
         widget=forms.Select(attrs={
-            'hint': "Main client color for elements"
+            'hint': 'Main client color for elements'
         })
     )
 

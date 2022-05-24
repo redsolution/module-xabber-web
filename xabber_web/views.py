@@ -16,7 +16,7 @@ class RootView(ServerInstalledMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         xabber_web_config = get_xabber_config()
         for key, value in xabber_web_config.items():
-            if isinstance(value, str) and value not in ['true', 'false']:
+            if isinstance(value, str) and value not in ('true', 'false'):
                 xabber_web_config[key] = "'{}'".format(value)
 
         context = {'config': xabber_web_config}
@@ -42,7 +42,7 @@ class XabberWebInfoView(PageContextMixin, TemplateView):
                 warning = 'Server restart required'
         current_config = domains_to_string(get_xabber_config())
         form = XabberWebConfigForm(initial=current_config)
-        return self.render_to_response(context={'warning': warning, "form": form})
+        return self.render_to_response(context={'warning': warning, 'form': form})
 
     def post(self, request, *args, **kwargs):
         if request.POST.get('reset'):
@@ -53,4 +53,4 @@ class XabberWebInfoView(PageContextMixin, TemplateView):
             if form.is_valid():
                 update_config(form.cleaned_data)
                 return HttpResponseRedirect(reverse('xabber_web:info'))
-            return self.render_to_response(context={"form": form})
+            return self.render_to_response(context={'form': form})
