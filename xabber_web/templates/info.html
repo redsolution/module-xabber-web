@@ -23,42 +23,42 @@
                 <form method="post">
                 {% csrf_token %}
                 {% with form.LOGIN_DOMAINS as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.REGISTRATION_DOMAINS as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.REGISTRATION_BUTTON as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 <hr>
                 {% with form.is_enabled as field %}
-                        {% include 'include/input_field.html' %}
+                        {% include 'input_field.html' %}
                 {% endwith %}
                 <div style="display:none" id="advanced-settings">
                 {% with form.CONNECTION_URL as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.LOG_LEVEL as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.MAIN_COLOR as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.REGISTRATION_CUSTOM_DOMAIN as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.LOGIN_CUSTOM_DOMAIN as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.DISABLE_LOOKUP_WS as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.RECOMMENDED_DOMAIN as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                 {% with form.TURN_SERVERS_LIST as field %}
-                    {% include 'include/input_field_with_popover.html' %}
+                    {% include 'input_field_with_popover.html' %}
                 {% endwith %}
                  {% for error in form.non_field_errors %}
                         <div class="form-group row">

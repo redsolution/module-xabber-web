@@ -5,7 +5,7 @@ from virtualhost.models import VirtualHost
 
 WHITENOISE_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/xabberweb')
 IS_ROOT_PAGE = True
-DOMAIN_LISTS = ['LOGIN_DOMAINS', 'REGISTRATION_DOMAINS', 'TRUSTED_DOMAINS']
+DOMAIN_LISTS = ('LOGIN_DOMAINS', 'REGISTRATION_DOMAINS', 'TRUSTED_DOMAINS')
 
 
 def domains_to_list(config_dict, is_form=False):
@@ -39,7 +39,7 @@ def get_xabber_config():
         "LOG_LEVEL": "ERROR",
         "MAIN_COLOR": "red",
         "LOGIN_DOMAINS": vhosts,
-        "REGISTRATION_DOMAINS": reg_vhosts,
+        "REGISTRATION_DOMAINS": reg_vhosts if reg_vhosts else None,
         "TRUSTED_DOMAINS": vhosts,
         "RECOMMENDED_DOMAIN": None,
         "TURN_SERVERS_LIST": None,
