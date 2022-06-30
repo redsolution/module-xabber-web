@@ -11,7 +11,7 @@ from .config import domains_to_string, get_xabber_config, update_config, XABBER_
 
 
 class RootView(ServerInstalledMixin, TemplateView):
-    template_name = 'index.html'
+    template_name = 'xabber_web/index.html'
 
     def get(self, request, *args, **kwargs):
         xabber_web_config = get_xabber_config()
@@ -26,7 +26,7 @@ class RootView(ServerInstalledMixin, TemplateView):
 
 
 class XabberWebInfoView(PageContextMixin, TemplateView):
-    template_name = 'info.html'
+    template_name = 'xabber_web/info.html'
 
     def get(self, request, *args, **kwargs):
         current_root_page = str(RootPageSettings.objects.all().first())
