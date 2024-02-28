@@ -8,16 +8,6 @@
     <meta charset="utf-8">
     <link rel="shortcut icon" type="image/png" href="{% static 'xmppserverui/img/favicon.png' %}"/>
     <link rel="manifest" href="{% static 'xabberweb/manifest.json' %}">
-    <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase-messaging.js"></script>
-    <link href="{% static 'xabberweb/dist/quill.snow.css' %}" rel="stylesheet">
-    <script src="{% static 'xabberweb/dist/quill.min.js' %}"></script>
-    <script src="{% static 'xabberweb/dist/libsignal-protocol.js' %}"></script>
-    <script type="text/javascript" src="{% static 'xabberweb/dist/ol.js' %}"></script>
-    <script type="text/javascript" src="{% static 'xabberweb/dist/ol-ext.js' %}"></script>
-    <link rel="stylesheet" href="/static/xabberweb/dist/xabber.min.css?ver={{ xabber_web_ver }}">
-    <script src="/static/xabberweb/dist/xabber.js?ver={{ xabber_web_ver }}"></script>
     <style type="text/css">
         body {
             background: url({% static 'xmppserverui/img/bg.png' %}) 100% 100% no-repeat;
@@ -96,38 +86,53 @@
 
 
 
-<body>
-<div class="login">
-     <div class="login-container-wrap">
-            <div class="login-container"></div>
-     </div>
-    <div class="login__device">
-        <a target="_blank" href="https://www.xabber.com/rel/client/android/last/xabber.apk" class="login__device-android">
-            <img src="{% static 'xmppserverui/img/client_android.svg' %}" alt="Android">
-            <span>Xabber for Android</span>
-        </a>
-        <a target="_blank" href="https://testflight.apple.com/join/8AVdKqCK" class="login__device-ios">
-            <img src="{% static 'xmppserverui/img/client_iphone.svg' %}" alt="Android">
-            <span>Xabber for iOS</span>
-        </a>
+<body style="height: 100%; width: 100%;">
+    <div id="xabber-container" style="height: 100%; width: 100%;">
+        <div class="login">
+             <div class="login-container-wrap">
+                    <div class="login-container"></div>
+             </div>
+            <div class="login__device">
+                <a target="_blank" href="https://www.xabber.com/rel/client/android/last/xabber.apk" class="login__device-android">
+                    <img src="{% static 'xmppserverui/img/client_android.svg' %}" alt="Android">
+                    <span>Xabber for Android</span>
+                </a>
+                <a target="_blank" href="https://testflight.apple.com/join/mSP4WiEV" class="login__device-ios">
+                    <img src="{% static 'xmppserverui/img/client_iphone.svg' %}" alt="Android">
+                    <span>Xabber for iOS</span>
+                </a>
+            </div>
+        </div>
     </div>
-
-</div>
 <script>
-    require(['xabber'], function (xabber) {
-        xabber.configure({
-        {% for key, value in config.items %}
-          {% if key == 'CONNECTION_URL' %}
-              {{ key }}: {% if value %} {{ value|safe }}
-                         {% else %} (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.hostname  + (window.location.protocol === 'https:' ? ':5443/wss' : ':5280/ws')
-                         {% endif %},
-          {% elif value %}
-             {{ key }}: {{ value|safe }},
-           {% endif %}
-         {% endfor %}
+        document.addEventListener('DOMContentLoaded', () => {
+            let js = document.createElement('script'),
+                js_vendors = document.createElement('script'),
+                css = document.createElement('link');
+            js.src='/static/xabberweb/dist/xabber.main.js';
+            js.onload = () => {
+                xabber.configure({
+                    {% for key, value in config.items %}
+                      {% if key == 'CONNECTION_URL' %}
+                          {{ key }}: {% if value %} {{ value|safe }}
+                                     {% else %} (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.hostname  + (window.location.protocol === 'https:' ? ':5443/ws' : ':5280/ws')
+                                     {% endif %},
+                      {% elif value %}
+                         {{ key }}: {{ value|safe }},
+                       {% endif %}
+                     {% endfor %}
+                });
+                xabber.start();
+            };
+            js_vendors.src='/static/xabberweb/dist/xabber.vendors.js';
+            document.head.appendChild(js_vendors);
+            css.href='/static/xabberweb/dist/main.css';
+            css.rel='stylesheet';
+            document.head.appendChild(css);
+            js_vendors.onload = () => {
+                document.head.appendChild(js);
+            };
         });
-    xabber.start();
-    });
-</script>
+    </script>
 </body>
 </html>

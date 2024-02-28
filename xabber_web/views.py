@@ -32,14 +32,7 @@ class XabberWebInfoView(PageContextMixin, TemplateView):
         current_root_page = str(RootPageSettings.objects.all().first())
         warning = None
         if current_root_page not in __package__:
-            warning = 'Set "Xabber for Web" as the root page in the settings and restart server'
-        else:
-            try:
-                wn_root = settings.WHITENOISE_ROOT
-                if WHITENOISE_ROOT != wn_root:
-                    warning = 'The server restart is required'
-            except Exception:
-                warning = 'Server restart required'
+            warning = 'Set "Xabber for Web" as the root page in the settings'
         current_config = domains_to_string(get_xabber_config())
         form = XabberWebConfigForm(initial=current_config)
         return self.render_to_response(context={'warning': warning, 'form': form})

@@ -17,7 +17,7 @@ client:
 		git init -q ;\
 		git remote add origin https://github.com/redsolution/xabber-web.git ;\
 	fi
-	@cd $(BUILD_DIR)/xabber_web && git checkout $(C_VERSION); git pull -q origin $(C_VERSION)
+	@cd $(BUILD_DIR)/xabber_web && git fetch && git checkout $(C_VERSION); git pull origin $(C_VERSION)
 
 
 mkdirs:
@@ -32,14 +32,9 @@ static:
 	@cp -r module.spec $(REL)/ && echo -n "."
 	@mkdir -p $(PANEL)/xabber_web/static/xabberweb
 	@cp -r $(BUILD_DIR)/xabber_web/dist  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
-	@cp -r $(BUILD_DIR)/xabber_web/fonts  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
-	@cp -r $(BUILD_DIR)/xabber_web/images  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
-	@cp -r $(BUILD_DIR)/xabber_web/sounds  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
-	@cp -r $(BUILD_DIR)/xabber_web/translations  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
+	@cp -r $(BUILD_DIR)/xabber_web/assets  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
 	@cp -r $(BUILD_DIR)/xabber_web/manifest.json  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
 	@cp -r $(BUILD_DIR)/xabber_web/firebase-messaging-sw.js  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
-	@cp -r $(BUILD_DIR)/xabber_web/background-images.xml  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
-	@cp -r $(BUILD_DIR)/xabber_web/background-patterns.xml  $(PANEL)/xabber_web/static/xabberweb/ && echo -n "."
 	@WEB_VER=$$(grep \"version_number\" $(BUILD_DIR)/xabber_web/version.js | sed -n "s/.*\"version_number\":\(\S*\),.*$$/\1/p");\
 	sed -r "s/^(XABBER_WEB_VER =).*/\1 $$WEB_VER/" xabber_web/config.py > $(PANEL)/xabber_web/config.py
 	@echo ". done."

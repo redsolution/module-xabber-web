@@ -47,6 +47,7 @@ def get_xabber_config():
         "REGISTRATION_CUSTOM_DOMAIN": "false",
         "LOGIN_CUSTOM_DOMAIN": "false",
         "REGISTRATION_BUTTON": "true",
+        "ASSETS_URL_PREFIX": "static/xabberweb/"
     }
     xabberweb_settings = XabberWebSettings.objects.all()
     if xabberweb_settings:
