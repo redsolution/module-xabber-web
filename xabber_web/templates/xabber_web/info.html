@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}XabberWeb Settings{% endblock %}
-{% block main_content %}
+{% block content %}
 
     <div class="row no-gutters">
         <div class="col-sm-12 page-content">
@@ -31,11 +31,17 @@
                 {% with form.REGISTRATION_BUTTON as field %}
                     {% include 'xabber_web/input_field_with_popover.html' %}
                 {% endwith %}
-                <hr>
-                {% with form.is_enabled as field %}
-                        {% include 'xabber_web/input_field.html' %}
-                {% endwith %}
-                <div style="display:none" id="advanced-settings">
+                    <div class="d-grid gap-2  col-6 mx-auto" style="margin-top:30px;">
+                        <button class="btn btn-outline-secondary"
+                                type="button" data-bs-toggle="collapse"  data-bs-target="#advanced-settings"
+                                aria-expanded="{% if form.is_enabled.value %}true{% else %}false{% endif %}"
+                                aria-controls="advanced-settings">
+                            Advanced settings
+                        </button>
+                    </div>
+
+                <div class="collapse {% if form.is_enabled.value %}show{% else %}false{% endif %}" id="advanced-settings"
+                     style="margin-top:30px;">
                 {% with form.CONNECTION_URL as field %}
                     {% include 'xabber_web/input_field_with_popover.html' %}
                 {% endwith %}
@@ -68,52 +74,15 @@
                         </div>
                     {% endfor %}
                 </div>
+                    <hr>
                     <div class="row form-group form-btn-block" style="margin-left:-8px">
                         <div class="col-sm-12">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="submit" class="btn btn-secondary" name="reset" value="true">Reset</button>
+                            <button type="submit" class="btn btn-primary" style="margin: .25rem .125rem;">Save</button>
+                            <button type="submit" class="btn btn-secondary" name="reset" value="true" style="margin: .25rem .125rem;">Reset</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block js %}
-    {{ block.super }}
-    <script>
-        function set_advanced_settings() {
-            var checked = $('#id_is_enabled').prop('checked');
-            if (checked)
-                $('#advanced-settings').show();
-            else
-                $('#advanced-settings').hide();
-        }
-
-        function updateAdvancedSettings() {
-            var checked = $('#id_is_enabled').prop('checked');
-            if (checked)
-                $('#advanced-settings').show();
-            else
-                $('#advanced-settings').hide();
-        }
-
-        $(document).ready(function() {
-            $('#id_is_enabled').bootstrapToggle({
-                on: 'Hide',
-                off: 'Show'
-                    });
-            updateAdvancedSettings();
-
-            $('#id_is_enabled').change(function() {
-                updateAdvancedSettings();
-            })
-        });
-    </script>
-    <script>
-        $(function () {
-            $('[data-toggle="popover"]').popover()
-        })
-    </script>
 {% endblock %}

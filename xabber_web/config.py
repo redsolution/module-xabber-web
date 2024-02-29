@@ -1,9 +1,8 @@
 import os
 from modules.xabber_web.models import XabberWebSettings
-from registration.models import RegistrationSettings
-from virtualhost.models import VirtualHost
+from xabber_server_panel.base_modules.registration.models import RegistrationSettings
+from xabber_server_panel.base_modules.config.models import VirtualHost
 
-WHITENOISE_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/xabberweb')
 IS_ROOT_PAGE = True
 DOMAIN_LISTS = ('LOGIN_DOMAINS', 'REGISTRATION_DOMAINS', 'TRUSTED_DOMAINS')
 
@@ -28,11 +27,19 @@ def domains_to_string(config_dict):
 
 
 def get_xabber_config():
+    return _get_xabber_config()
+
+
+def init_form():
+    return domains_to_string(_get_xabber_config(is_init_form=True))
+
+
+def _get_xabber_config(is_init_form=False):
     """
     debug, trusted_domains, check_version - immutable
     """
     vhosts = list(VirtualHost.objects.order_by('name').values_list('name', flat=True))
-    reg_vhosts = list(RegistrationSettings.objects.order_by('vhost__name').values_list('vhost__name', flat=True))
+    reg_vhosts = list(RegistrationSettings.objects.order_by('host__name').values_list('host__name', flat=True))
     template_config = {
         "CONNECTION_URL": None,
         "DISABLE_LOOKUP_WS": "true",
@@ -51,8 +58,14 @@ def get_xabber_config():
     }
     xabberweb_settings = XabberWebSettings.objects.all()
     if xabberweb_settings:
+        enable_advanced = False
+
         for obj in xabberweb_settings.values():
+            if obj.get('key') not in ["LOGIN_DOMAINS", "REGISTRATION_DOMAINS", "REGISTRATION_BUTTON"]:
+                enable_advanced = True
             template_config[obj.get('key')] = obj.get('value')
+        if is_init_form and enable_advanced:
+            template_config['is_enabled'] = True
     return domains_to_list(template_config)
 
 

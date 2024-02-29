@@ -1,16 +1,16 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
-from server.models import RootPageSettings
-from xmppserverui.mixins import PageContextMixin, ServerInstalledMixin
-from django.conf import settings
-from .config import WHITENOISE_ROOT
+
+from xabber_server_panel.base_modules.config.models import RootPage
+from xabber_server_panel.base_modules.users.decorators import permission_read, permission_write
 from .forms import XabberWebConfigForm
 from .models import XabberWebSettings
-from .config import domains_to_string, get_xabber_config, update_config, XABBER_WEB_VER
+from .config import get_xabber_config, update_config, XABBER_WEB_VER, init_form
 
 
-class RootView(ServerInstalledMixin, TemplateView):
+class RootView(TemplateView):
     template_name = 'xabber_web/index.html'
 
     def get(self, request, *args, **kwargs):
@@ -25,18 +25,22 @@ class RootView(ServerInstalledMixin, TemplateView):
         return self.render_to_response(context=context)
 
 
-class XabberWebInfoView(PageContextMixin, TemplateView):
+class XabberWebInfoView(LoginRequiredMixin, TemplateView):
     template_name = 'xabber_web/info.html'
+    app = 'xabber_web'
 
+    @permission_read
     def get(self, request, *args, **kwargs):
-        current_root_page = str(RootPageSettings.objects.all().first())
+        current_root_page = str(RootPage.objects.all().first())
         warning = None
         if current_root_page not in __package__:
             warning = 'Set "Xabber for Web" as the root page in the settings'
-        current_config = domains_to_string(get_xabber_config())
+        current_config = init_form()
+        print(current_config)
         form = XabberWebConfigForm(initial=current_config)
         return self.render_to_response(context={'warning': warning, 'form': form})
 
+    @permission_write
     def post(self, request, *args, **kwargs):
         if request.POST.get('reset'):
             XabberWebSettings.objects.all().delete()

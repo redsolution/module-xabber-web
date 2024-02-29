@@ -17,7 +17,7 @@ client:
 		git init -q ;\
 		git remote add origin https://github.com/redsolution/xabber-web.git ;\
 	fi
-	@cd $(BUILD_DIR)/xabber_web && git fetch && git checkout $(C_VERSION); git pull origin $(C_VERSION)
+	@cd $(BUILD_DIR)/xabber_web && git fetch && git checkout $(C_VERSION); git pull --depth=1 origin $(C_VERSION)
 
 
 mkdirs:
