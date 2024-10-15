@@ -4,6 +4,7 @@ C_VERSION ?= develop
 REL = $(BUILD_DIR)/rel
 PANEL = $(REL)/panel
 SERVER = $(REL)/server
+ARCHIVES = "archives"
 
 .PHONY: all
 
@@ -17,7 +18,7 @@ client:
 		git init -q ;\
 		git remote add origin https://github.com/redsolution/xabber-web.git ;\
 	fi
-	@cd $(BUILD_DIR)/xabber_web && git fetch && git checkout $(C_VERSION); git pull --depth=1 origin $(C_VERSION)
+	@cd $(BUILD_DIR)/xabber_web && git fetch && git checkout $(C_VERSION); git pull origin $(C_VERSION)
 
 
 mkdirs:
@@ -25,6 +26,7 @@ mkdirs:
 	@if [ ! -d "$(REL)" ]; then  mkdir $(REL);fi
 	@if [ ! -d "$(PANEL)" ]; then  mkdir $(PANEL);fi
 	@if [ ! -d "$(SERVER)" ]; then  mkdir $(SERVER);fi
+	@if [ ! -d "$(ARCHIVES)" ]; then  mkdir $(ARCHIVES);fi
 
 static:
 	@echo -n "Collect static ..."
@@ -42,7 +44,7 @@ static:
 
 archive: mkdirs client static
 	@echo -n "Make archive ..."
-	@cd $(REL) && tar -czf "../module_$(NAME)_$(VERSION).tar.gz" panel server module.spec
+	@cd $(REL) && tar -czf "../../$(ARCHIVES)/module_$(NAME)_$(VERSION).tar.gz" panel server module.spec
 	@echo ". done."
 
 clean:

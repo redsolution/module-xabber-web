@@ -1,9 +1,7 @@
 import os
 from modules.xabber_web.models import XabberWebSettings
-from xabber_server_panel.base_modules.registration.models import RegistrationSettings
-from xabber_server_panel.base_modules.config.models import VirtualHost
+from xabber_server_panel.base_modules.config.models import VirtualHost, ModuleSettings
 
-IS_ROOT_PAGE = True
 DOMAIN_LISTS = ('LOGIN_DOMAINS', 'REGISTRATION_DOMAINS', 'TRUSTED_DOMAINS')
 
 
@@ -39,7 +37,8 @@ def _get_xabber_config(is_init_form=False):
     debug, trusted_domains, check_version - immutable
     """
     vhosts = list(VirtualHost.objects.order_by('name').values_list('name', flat=True))
-    reg_vhosts = list(RegistrationSettings.objects.order_by('host__name').values_list('host__name', flat=True))
+    reg_vhosts = list(ModuleSettings.objects.filter(module='mod_register').
+                      values_list('host', flat=True))
     template_config = {
         "CONNECTION_URL": None,
         "DISABLE_LOOKUP_WS": "true",
