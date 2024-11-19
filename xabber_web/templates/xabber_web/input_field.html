@@ -1,16 +1,48 @@
 {% if not field.is_hidden %}
-<div class="row form-group {% if field.errors %}invalid{% endif %}">
-    <label for="{{ field.id_for_label }}" class="col-sm-3 col-form-label">
-        {{ field.label }}
-    </label>
-    <div class="col-sm-9">
-        {{ field }}
-        {% if field.help_text %}
-            <small class="form-text text-muted">{{ field.help_text }}</small>
-        {% endif %}
-        <div class="invalid-feedback d-block">
-            {% for field_error in field.errors %}{{ field_error }} {% endfor %}
+    <div class="row mb-3">
+        <label class="col-form-label col-10 col-md-3 {% if field.errors %}text-danger{% endif %}">
+            {{ field.label }}
+        </label>
+        <div class="col-10 col-md-8">
+            {% if field.field.widget.input_type == 'text' %}
+                <input class="form-control" type="text" name="{{ field.name }}" {% if field.value %}value="{{ field.value }}"{% endif %}
+                {% for name, value in field.field.widget.attrs.items %}
+                       {% if value is not False %}{{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}
+                {% endfor %}>
+            {% elif field.field.widget.input_type == 'select' %}
+                <select class="form-select" name="{{ field.name }}"
+                {% for name, value in field.field.widget.attrs.items %}
+                       {% if value is not False %}{{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}
+                {% endfor %}>
+                    {% for choice in field.field.choices %}
+                        <option value="{{ choice.0 }}" {% if field.value == choice.0 %}selected{% endif %}>
+                            {{ choice.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <textarea class="form-control" name="{{ field.name }}"
+                {% for name, value in field.field.widget.attrs.items %}
+                       {% if value is not False %}{{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}
+                {% endfor %}>{% if field.value %}{{ field.value }}{% endif %}</textarea>
+            {% endif %}
+            {% if field.help_text %}
+                <span class="form-text text-secondary">
+                    {{ field.help_text }}
+                </span>
+            {% endif %}
+            {% for field_error in field.errors %}
+                <span class="form-text text-danger">
+                    {{ field_error }}<br>
+                </span>
+            {% endfor %}
         </div>
+        {% if field.field.widget.attrs.hint %}
+            <div class="col-2 col-md-1">
+                <div class="icon-link text-primary fs-5" type="button" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{ field.field.widget.attrs.hint }}">
+                    <i class="bi bi-info-circle-fill d-flex"></i>
+                </div>
+            </div>
+        {% endif %}
     </div>
-</div>
 {% endif %}
